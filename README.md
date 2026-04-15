@@ -2,12 +2,9 @@
 
 **RPA para relatórios financeiros** - Coleta dados, processa transações e gera relatórios Excel automaticamente.
 
-[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/lucC277/bank-report-automator-Final/actions)
-[![Code Coverage](https://img.shields.io/badge/coverage-85%25-green.svg)](https://github.com/lucC277/bank-report-automator-Final)
-[![GitHub Issues](https://img.shields.io/github/issues/lucC277/bank-report-automator-Final.svg)](https://github.com/lucC277/bank-report-automator-Final/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/lucC277/bank-report-automator-Final.svg)](https://github.com/lucC277/bank-report-automator-Final/stargazers)
+[![CI/CD Pipeline](https://github.com/lucC277/bank-report-automator-Final/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/lucC277/bank-report-automator-Final/actions)
+[![Code Coverage](https://codecov.io/gh/lucC277/bank-report-automator-Final/branch/master/graph/badge.svg)](https://codecov.io/gh/lucC277/bank-report-automator-Final)
+[![Python Versions](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
 
 ## 🚀 Funcionalidades
 
@@ -136,43 +133,86 @@ Para modificar configurações:
 2. Modifique `data/transacoes.csv` para adicionar novas transações
 3. Ajuste as categorias em `config.py` conforme necessário
 
-## 🧪 Desenvolvimento e Testes
+## 🚀 CI/CD e Desenvolvimento
 
-### Configuração do Ambiente de Desenvolvimento
+### Pipeline de CI/CD
+O projeto utiliza GitHub Actions para automação completa:
+
+- **✅ Testes Automatizados**: pytest com cobertura de código
+- **🔍 Linting e Formatação**: flake8, black, isort, mypy
+- **🔒 Segurança**: bandit e safety para vulnerabilidades
+- **📦 Build**: Geração de executáveis com PyInstaller
+- **📊 Cobertura**: Relatórios de cobertura via Codecov
+
+### Status do Pipeline
+[![CI/CD Pipeline](https://github.com/lucC277/bank-report-automator-Final/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/lucC277/bank-report-automator-Final/actions)
+[![Code Coverage](https://codecov.io/gh/lucC277/bank-report-automator-Final/branch/master/graph/badge.svg)](https://codecov.io/gh/lucC277/bank-report-automator-Final)
+
+### Ferramentas de Desenvolvimento
+
+#### Instalação Completa para Desenvolvimento
 ```bash
-# Clone o repositório
-git clone https://github.com/lucC277/bank-report-automator-Final.git
-cd bank-report-automator-Final
+# Instale dependências de desenvolvimento
+pip install -r requirements-dev.txt
 
-# Crie ambiente virtual
-python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
+# Configure pre-commit hooks
+pre-commit install
 
-# Instale dependências
-pip install -r requirements.txt
+# Execute todos os testes
+make test
+
+# Execute linting completo
+make lint
+
+# Formate o código
+make format
 ```
 
-### Executando Testes
+#### Comandos Disponíveis (Makefile)
 ```bash
-# Teste básico de funcionalidade
-python main.py
-
-# Verificar logs
-type bank_report.log  # Windows
-# cat bank_report.log  # Linux/Mac
+make help          # Mostra todos os comandos disponíveis
+make test          # Executa testes com pytest
+make test-cov      # Executa testes com relatório de cobertura
+make lint          # Executa flake8, black, isort, mypy
+make format        # Formata código com black e isort
+make security      # Executa verificações de segurança
+make build         # Gera executável com PyInstaller
+make clean         # Limpa arquivos temporários
+make dev-setup     # Configura ambiente de desenvolvimento
 ```
 
-### Estrutura de Testes (Futuro)
+#### Estrutura de Testes
 ```
 tests/
-├── test_collector.py    # Testes da coleta de dados
-├── test_processor.py    # Testes do processamento
-├── test_exporter.py     # Testes da exportação
-└── test_integration.py  # Testes de integração
+├── test_collector.py    # Testes para coleta de cotações
+├── test_processor.py    # Testes para processamento de dados
+└── test_exporter.py     # Testes para exportação Excel
 ```
 
-## 🤝 Contribuição
+#### Configurações de Qualidade de Código
+- **black**: Formatação automática de código
+- **isort**: Organização de imports
+- **flake8**: Linting e detecção de problemas
+- **mypy**: Verificação de tipos estáticos
+- **bandit**: Análise de segurança
+- **safety**: Verificação de vulnerabilidades em dependências
+
+### Contribuição
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
+3. Execute os testes e linting (`make test && make lint`)
+4. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+5. Push para a branch (`git push origin feature/nova-funcionalidade`)
+6. Abra um Pull Request
+
+### Pré-commit Hooks
+O projeto utiliza pre-commit para automatizar verificações antes de cada commit:
+- Formatação de código
+- Linting
+- Verificação de tipos
+- Testes rápidos
+
+##  Contribuição
 
 Contribuições são bem-vindas! Para contribuir:
 

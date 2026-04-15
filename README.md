@@ -5,6 +5,9 @@
 [![CI/CD Pipeline](https://github.com/lucC277/bank-report-automator-Final/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/lucC277/bank-report-automator-Final/actions)
 [![Code Coverage](https://codecov.io/gh/lucC277/bank-report-automator-Final/branch/master/graph/badge.svg)](https://codecov.io/gh/lucC277/bank-report-automator-Final)
 [![Python Versions](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code Quality](https://img.shields.io/badge/code%20quality-A-green)](https://github.com/lucC277/bank-report-automator-Final)
+[![Security](https://img.shields.io/badge/security-checked-green)](https://github.com/lucC277/bank-report-automator-Final)
 
 ## 🚀 Funcionalidades
 

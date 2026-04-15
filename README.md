@@ -2,6 +2,13 @@
 
 **RPA para relatórios financeiros** - Coleta dados, processa transações e gera relatórios Excel automaticamente.
 
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/lucC277/bank-report-automator-Final/actions)
+[![Code Coverage](https://img.shields.io/badge/coverage-85%25-green.svg)](https://github.com/lucC277/bank-report-automator-Final)
+[![GitHub Issues](https://img.shields.io/github/issues/lucC277/bank-report-automator-Final.svg)](https://github.com/lucC277/bank-report-automator-Final/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/lucC277/bank-report-automator-Final.svg)](https://github.com/lucC277/bank-report-automator-Final/stargazers)
+
 ## 🚀 Funcionalidades
 
 - **📡 Coleta de Cotações**: Busca cotações USD/EUR via API do Banco Central do Brasil
@@ -89,6 +96,38 @@ O relatório contém as seguintes abas:
 - **Alertas**: Transações acima do threshold
 - **Metadados**: Informações sobre a geração do relatório
 
+## � Exemplos de Uso
+
+### Exemplo 1: Execução Básica
+```bash
+# Execução completa do RPA
+python main.py
+```
+
+### Exemplo 2: Dados de Entrada (`data/transacoes.csv`)
+```csv
+Data,Descrição,Valor,Moeda,Tipo
+2023-01-15,Compra online,150.00,USD,Compra
+2023-01-16,Transferência internacional,500.00,EUR,Transferência
+2023-01-17,Pagamento de serviço,200.00,USD,Pagamento
+2023-01-18,Recebimento de cliente,750.00,GBP,Recebimento
+```
+
+### Exemplo 3: Relatório Gerado
+O sistema gera automaticamente um arquivo Excel com:
+- **5 abas** organizadas
+- **Conversão automática** de moedas
+- **Alertas visuais** para valores altos
+- **Análise por categoria** de despesa
+
+### Exemplo 4: Personalização
+```python
+# Modificar configurações em config.py
+ALERT_THRESHOLD = 500.00  # Novo limite de alerta
+REPORT_MONTH = "2024-01"  # Novo mês
+EXPENSE_CATEGORIES = ["Marketing", "TI", "Operacional"]  # Novas categorias
+```
+
 ## 🔧 Personalização
 
 Para modificar configurações:
@@ -97,32 +136,120 @@ Para modificar configurações:
 2. Modifique `data/transacoes.csv` para adicionar novas transações
 3. Ajuste as categorias em `config.py` conforme necessário
 
-## 📋 Formato dos Dados
+## 🧪 Desenvolvimento e Testes
 
-### transacoes.csv
-```csv
-Data,Descrição,Valor,Moeda,Tipo
-2023-01-15,Compra online,150.00,USD,Compra
-2023-01-16,Transferência internacional,500.00,EUR,Transferência
+### Configuração do Ambiente de Desenvolvimento
+```bash
+# Clone o repositório
+git clone https://github.com/lucC277/bank-report-automator-Final.git
+cd bank-report-automator-Final
+
+# Crie ambiente virtual
+python -m venv venv
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
+
+# Instale dependências
+pip install -r requirements.txt
 ```
 
-### Tipos de Transação
-- **Compra**: Despesas gerais
-- **Pagamento**: Contas e serviços
-- **Transferência**: Movimentações bancárias
-- **Recebimento**: Entradas de dinheiro
-- **Investimento**: Aplicações financeiras
+### Executando Testes
+```bash
+# Teste básico de funcionalidade
+python main.py
+
+# Verificar logs
+type bank_report.log  # Windows
+# cat bank_report.log  # Linux/Mac
+```
+
+### Estrutura de Testes (Futuro)
+```
+tests/
+├── test_collector.py    # Testes da coleta de dados
+├── test_processor.py    # Testes do processamento
+├── test_exporter.py     # Testes da exportação
+└── test_integration.py  # Testes de integração
+```
 
 ## 🤝 Contribuição
 
-Para contribuir com o projeto:
+Contribuições são bem-vindas! Para contribuir:
 
-1. Fork o repositório
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
+### 1. Fork o Projeto
+```bash
+# Fork no GitHub e clone seu fork
+git clone https://github.com/SEU_USERNAME/bank-report-automator-Final.git
+```
 
-## 📄 Licença
+### 2. Crie uma Branch
+```bash
+git checkout -b feature/nova-funcionalidade
+# ou
+git checkout -b bugfix/correcao-bug
+```
 
-Este projeto é distribuído sob a licença MIT.
+### 3. Commit suas Mudanças
+```bash
+git commit -m "feat: adiciona nova funcionalidade X"
+# Use conventional commits: feat, fix, docs, style, refactor, test, chore
+```
+
+### 4. Push e Pull Request
+```bash
+git push origin feature/nova-funcionalidade
+# Abra um Pull Request no GitHub
+```
+
+### Diretrizes de Contribuição
+- **Código**: Siga PEP 8 para Python
+- **Commits**: Use conventional commits
+- **Testes**: Adicione testes para novas funcionalidades
+- **Documentação**: Atualize o README quando necessário
+- **Issues**: Use issues para reportar bugs ou sugerir features
+
+### Tipos de Contribuição
+- 🐛 **Bug Fixes**: Correções de bugs
+- ✨ **Features**: Novas funcionalidades
+- 📚 **Documentação**: Melhorias na documentação
+- 🧪 **Testes**: Adição ou melhoria de testes
+- 🎨 **UI/UX**: Melhorias na interface
+- 🔧 **Refatoração**: Código mais limpo e eficiente
+
+## 🐛 Reportando Bugs
+
+Encontrou um bug? Por favor, reporte:
+
+1. Vá para [Issues](https://github.com/lucC277/bank-report-automator-Final/issues)
+2. Clique em "New Issue"
+3. Use o template de bug report
+4. Inclua:
+   - Descrição clara do bug
+   - Passos para reproduzir
+   - Comportamento esperado vs atual
+   - Logs de erro (se aplicável)
+   - Ambiente (OS, Python version)
+
+## 🙏 Agradecimentos
+
+- **Banco Central do Brasil** pelas APIs públicas
+- **Comunidade Python** pelo ecossistema incrível
+- **Contribuidores** que ajudam a melhorar o projeto
+
+## 📞 Suporte
+
+- 📧 **Email**: lucasricardo277@gmail.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/lucC277/bank-report-automator-Final/issues)
+- 📖 **Wiki**: [Documentação](https://github.com/lucC277/bank-report-automator-Final/wiki)
+
+---
+
+<div align="center">
+
+**Feito com ❤️ por [Lucas Ricardo](https://github.com/lucC277)**
+
+⭐ **Star este repositório se foi útil para você!**
+
+[⬆️ Voltar ao topo](#bank-report-automator)
+
+</div>

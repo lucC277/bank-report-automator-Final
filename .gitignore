@@ -1,0 +1,66 @@
+# .gitignore para Bank Report Automator
+
+# Arquivos de log
+*.log
+bank_report.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Ambiente virtual Python
+venv/
+env/
+ENV/
+.Python
+.venv/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dados sensíveis (descomente se necessário)
+# data/cotacoes.xlsx
+# reports/relatorio_final.xlsx
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Distribuição
+dist/
+build/
+*.egg-info/
+
+# Arquivos de configuração local
+config_local.py
+.env
+
+# Logs do pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testes e cobertura
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Git
+.git
+
+# MyPy e pytest
+.mypy_cache
+.pytest_cache
+.hypothesis

@@ -1,14 +1,17 @@
 # collector.py - Módulo para coleta de dados de cotações
 
-import requests
-import pandas as pd
-from datetime import datetime, timedelta
 import logging
-from config import USD_API_URL, EUR_API_URL, EXCHANGE_RATES_FILE, DEFAULT_CURRENCY
+from datetime import datetime
+
+import pandas as pd
+import requests
+
+from config import DEFAULT_CURRENCY, EUR_API_URL, EXCHANGE_RATES_FILE, USD_API_URL
 
 # Configuração do logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class ExchangeRateCollector:
     def __init__(self):
@@ -38,7 +41,7 @@ class ExchangeRateCollector:
             if usd_data:
                 # Pega o último valor disponível
                 latest_usd = usd_data[-1]
-                rates['USD'] = float(latest_usd.get('valor', 0))
+                rates["USD"] = float(latest_usd.get("valor", 0))
                 logger.info(f"Cotação USD obtida: R$ {rates['USD']}")
 
             # Busca cotação do EUR
@@ -49,7 +52,7 @@ class ExchangeRateCollector:
             if eur_data:
                 # Pega o último valor disponível
                 latest_eur = eur_data[-1]
-                rates['EUR'] = float(latest_eur.get('valor', 0))
+                rates["EUR"] = float(latest_eur.get("valor", 0))
                 logger.info(f"Cotação EUR obtida: R$ {rates['EUR']}")
 
             return rates
@@ -74,12 +77,12 @@ class ExchangeRateCollector:
 
         try:
             # Converte para DataFrame
-            df = pd.DataFrame(list(rates.items()), columns=['Moeda', 'Cotação'])
-            df['Data'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            df = pd.DataFrame(list(rates.items()), columns=["Moeda", "Cotação"])
+            df["Data"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # Salva em Excel
-            with pd.ExcelWriter(filename, engine='openpyxl') as writer:
-                df.to_excel(writer, sheet_name='Cotações', index=False)
+            with pd.ExcelWriter(filename, engine="openpyxl") as writer:
+                df.to_excel(writer, sheet_name="Cotações", index=False)
 
             logger.info(f"Cotações salvas em {filename}")
 
@@ -96,9 +99,11 @@ class ExchangeRateCollector:
             return True
         return False
 
+
 if __name__ == "__main__":
     collector = ExchangeRateCollector()
     collector.collect_and_save_rates()
+
 
 # Função para uso direto (conforme esperado pelo main.py)
 def collect_exchange_rates():
@@ -136,4 +141,4 @@ def collect_exchange_rates():
         df_final.to_excel(EXCHANGE_RATES_FILE, index=False)
 
     return rates
-    return {'USD': 5.20, 'EUR': 6.10}
+    return {"USD": 5.20, "EUR": 6.10}

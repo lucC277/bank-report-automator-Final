@@ -1,13 +1,15 @@
 # processor.py - Módulo para processamento de dados
 
-import pandas as pd
 import logging
-from config import TRANSACTIONS_FILE, EXCHANGE_RATES_FILE, TARGET_CURRENCY, EXPENSE_CATEGORIES, ALERT_THRESHOLD
-from datetime import datetime
+
+import pandas as pd
+
+from config import ALERT_THRESHOLD, EXCHANGE_RATES_FILE, EXPENSE_CATEGORIES, TARGET_CURRENCY, TRANSACTIONS_FILE
 
 # Configuração do logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class DataProcessor:
     def __init__(self):
@@ -40,7 +42,7 @@ class DataProcessor:
             pd.DataFrame: DataFrame com as cotações
         """
         try:
-            df = pd.read_excel(self.exchange_rates_file, sheet_name='Cotações')
+            df = pd.read_excel(self.exchange_rates_file, sheet_name="Cotações")
             logger.info(f"Cotações carregadas: {len(df)} registros")
             return df
         except Exception as e:
@@ -62,20 +64,20 @@ class DataProcessor:
         """
         try:
             # Encontra a cotação da moeda de origem para USD
-            from_rate_row = exchange_rates_df[exchange_rates_df['Moeda'] == from_currency]
+            from_rate_row = exchange_rates_df[exchange_rates_df["Moeda"] == from_currency]
             if from_rate_row.empty:
                 logger.warning(f"Cotação não encontrada para {from_currency}")
                 return amount
 
-            from_rate = from_rate_row['Cotação'].iloc[0]
+            from_rate = from_rate_row["Cotação"].iloc[0]
 
             # Encontra a cotação da moeda de destino para USD
-            to_rate_row = exchange_rates_df[exchange_rates_df['Moeda'] == to_currency]
+            to_rate_row = exchange_rates_df[exchange_rates_df["Moeda"] == to_currency]
             if to_rate_row.empty:
                 logger.warning(f"Cotação não encontrada para {to_currency}")
                 return amount
 
-            to_rate = to_rate_row['Cotação'].iloc[0]
+            to_rate = to_rate_row["Cotação"].iloc[0]
 
             # Converte: valor_origem / taxa_origem * taxa_destino
             converted_amount = amount / from_rate * to_rate
@@ -101,20 +103,15 @@ class DataProcessor:
             processed_df = transactions_df.copy()
 
             # Assume que há colunas 'Valor' e 'Moeda'
-            if 'Valor' in processed_df.columns and 'Moeda' in processed_df.columns:
+            if "Valor" in processed_df.columns and "Moeda" in processed_df.columns:
                 # Converte os valores
-                processed_df['Valor_Convertido'] = processed_df.apply(
-                    lambda row: self.convert_currency(
-                        row['Valor'],
-                        row['Moeda'],
-                        self.target_currency,
-                        exchange_rates_df
-                    ),
-                    axis=1
+                processed_df["Valor_Convertido"] = processed_df.apply(
+                    lambda row: self.convert_currency(row["Valor"], row["Moeda"], self.target_currency, exchange_rates_df),
+                    axis=1,
                 )
 
                 # Adiciona coluna com a moeda alvo
-                processed_df['Moeda_Alvo'] = self.target_currency
+                processed_df["Moeda_Alvo"] = self.target_currency
 
                 logger.info("Transações processadas com sucesso")
             else:
@@ -139,31 +136,33 @@ class DataProcessor:
         try:
             summary = {}
 
-            if 'Valor_Convertido' in processed_df.columns:
-                summary['total_valor'] = processed_df['Valor_Convertido'].sum()
-                summary['media_valor'] = processed_df['Valor_Convertido'].mean()
-                summary['num_transacoes'] = len(processed_df)
-                summary['moeda_alvo'] = self.target_currency
+            if "Valor_Convertido" in processed_df.columns:
+                summary["total_valor"] = processed_df["Valor_Convertido"].sum()
+                summary["media_valor"] = processed_df["Valor_Convertido"].mean()
+                summary["num_transacoes"] = len(processed_df)
+                summary["moeda_alvo"] = self.target_currency
 
                 # Calcula entradas e saídas
-                if 'Tipo' in processed_df.columns:
-                    income_mask = processed_df['Tipo'].str.contains('Recebimento|Investimento', case=False, na=False)
-                    expense_mask = processed_df['Tipo'].str.contains('Compra|Pagamento|Transferência', case=False, na=False)
+                if "Tipo" in processed_df.columns:
+                    income_mask = processed_df["Tipo"].str.contains("Recebimento|Investimento", case=False, na=False)
+                    expense_mask = processed_df["Tipo"].str.contains("Compra|Pagamento|Transferência", case=False, na=False)
 
-                    summary['total_income'] = processed_df.loc[income_mask, 'Valor_Convertido'].sum()
-                    summary['total_expenses'] = processed_df.loc[expense_mask, 'Valor_Convertido'].sum()
-                    summary['balance'] = summary['total_income'] - summary['total_expenses']
+                    summary["total_income"] = processed_df.loc[income_mask, "Valor_Convertido"].sum()
+                    summary["total_expenses"] = processed_df.loc[expense_mask, "Valor_Convertido"].sum()
+                    summary["balance"] = summary["total_income"] - summary["total_expenses"]
 
                     # Análise por categoria de despesa
-                    summary['expenses_by_category'] = {}
+                    summary["expenses_by_category"] = {}
                     for category in self.expense_categories:
-                        category_mask = processed_df['Descrição'].str.contains(category, case=False, na=False) & expense_mask
-                        summary['expenses_by_category'][category] = processed_df.loc[category_mask, 'Valor_Convertido'].sum()
+                        category_mask = processed_df["Descrição"].str.contains(category, case=False, na=False) & expense_mask
+                        summary["expenses_by_category"][category] = processed_df.loc[category_mask, "Valor_Convertido"].sum()
 
                     # Detecta alertas (transações acima do threshold)
-                    high_value_mask = processed_df['Valor_Convertido'] > self.alert_threshold
-                    summary['alerts'] = len(processed_df[high_value_mask])
-                    summary['alert_transactions'] = processed_df[high_value_mask][['Data', 'Descrição', 'Valor_Convertido']].to_dict('records')
+                    high_value_mask = processed_df["Valor_Convertido"] > self.alert_threshold
+                    summary["alerts"] = len(processed_df[high_value_mask])
+                    summary["alert_transactions"] = processed_df[high_value_mask][
+                        ["Data", "Descrição", "Valor_Convertido"]
+                    ].to_dict("records")
 
             return summary
 
@@ -194,12 +193,14 @@ class DataProcessor:
 
         return processed_df, summary
 
+
 if __name__ == "__main__":
     processor = DataProcessor()
     processed_data, summary = processor.process_all()
     print("Resumo do processamento:")
     print(summary)
 
+
 # Função para uso direto (conforme esperado pelo main.py)
 def process_transactions():
     """
@@ -212,56 +213,12 @@ def process_transactions():
     processed_data, summary = processor.process_all()
 
     if processed_data.empty:
-        return {
-            'total_transactions': 0,
-            'total_income': 0.0,
-            'total_expenses': 0.0,
-            'balance': 0.0
-        }
+        return {"total_transactions": 0, "total_income": 0.0, "total_expenses": 0.0, "balance": 0.0}
 
     # Retorna apenas os campos esperados pelo main.py
     return {
-        'total_transactions': summary.get('num_transacoes', 0),
-        'total_income': summary.get('total_income', 0.0),
-        'total_expenses': summary.get('total_expenses', 0.0),
-        'balance': summary.get('balance', 0.0)
-    }
-
-# Função para uso direto (conforme esperado pelo main.py)
-def process_transactions():
-    """
-    Função que processa as transações e retorna um resumo
-
-    Returns:
-        dict: Dicionário com resumo das transações
-    """
-    processor = DataProcessor()
-    processed_data, summary = processor.process_all()
-
-    if processed_data.empty:
-        return {
-            'total_transactions': 0,
-            'total_income': 0.0,
-            'total_expenses': 0.0,
-            'balance': 0.0
-        }
-
-    # Calcula totais baseado nos tipos de transação
-    total_income = 0.0
-    total_expenses = 0.0
-
-    if 'Valor_Convertido' in processed_data.columns and 'Tipo' in processed_data.columns:
-        income_mask = processed_data['Tipo'].str.contains('Recebimento|Investimento', case=False, na=False)
-        expense_mask = processed_data['Tipo'].str.contains('Compra|Pagamento|Transferência', case=False, na=False)
-
-        total_income = processed_data.loc[income_mask, 'Valor_Convertido'].sum()
-        total_expenses = processed_data.loc[expense_mask, 'Valor_Convertido'].sum()
-
-    balance = total_income - total_expenses
-
-    return {
-        'total_transactions': len(processed_data),
-        'total_income': total_income,
-        'total_expenses': total_expenses,
-        'balance': balance
+        "total_transactions": summary.get("num_transacoes", 0),
+        "total_income": summary.get("total_income", 0.0),
+        "total_expenses": summary.get("total_expenses", 0.0),
+        "balance": summary.get("balance", 0.0),
     }

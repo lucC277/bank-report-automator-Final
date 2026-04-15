@@ -1,13 +1,16 @@
 # exporter.py - Módulo para exportação de dados
 
-import pandas as pd
 import logging
-from config import FINAL_REPORT_FILE, EXPENSE_CATEGORIES, ALERT_THRESHOLD
 from datetime import datetime
+
+import pandas as pd
+
+from config import ALERT_THRESHOLD, EXPENSE_CATEGORIES, FINAL_REPORT_FILE
 
 # Configuração do logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class DataExporter:
     def __init__(self):
@@ -28,23 +31,23 @@ class DataExporter:
             filename = self.final_report_file
 
         try:
-            with pd.ExcelWriter(filename, engine='openpyxl') as writer:
+            with pd.ExcelWriter(filename, engine="openpyxl") as writer:
                 # Aba com dados processados
-                processed_df.to_excel(writer, sheet_name='Dados_Processados', index=False)
+                processed_df.to_excel(writer, sheet_name="Dados_Processados", index=False)
 
                 # Aba com resumo
                 if summary:
-                    summary_df = pd.DataFrame(list(summary.items()), columns=['Métrica', 'Valor'])
-                    summary_df.to_excel(writer, sheet_name='Resumo', index=False)
+                    summary_df = pd.DataFrame(list(summary.items()), columns=["Métrica", "Valor"])
+                    summary_df.to_excel(writer, sheet_name="Resumo", index=False)
 
                 # Aba com informações adicionais
                 info_data = {
-                    'Data_Geração': [datetime.now().strftime('%Y-%m-%d %H:%M:%S')],
-                    'Total_Registros': [len(processed_df) if not processed_df.empty else 0],
-                    'Arquivo_Origem': [filename]
+                    "Data_Geração": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+                    "Total_Registros": [len(processed_df) if not processed_df.empty else 0],
+                    "Arquivo_Origem": [filename],
                 }
                 info_df = pd.DataFrame(info_data)
-                info_df.to_excel(writer, sheet_name='Informações', index=False)
+                info_df.to_excel(writer, sheet_name="Informações", index=False)
 
             logger.info(f"Relatório exportado com sucesso para {filename}")
 
@@ -63,7 +66,7 @@ class DataExporter:
             filename = self.final_report_file
 
         try:
-            df.to_excel(filename, index=False, engine='openpyxl')
+            df.to_excel(filename, index=False, engine="openpyxl")
             logger.info(f"Transações exportadas para {filename}")
         except Exception as e:
             logger.error(f"Erro ao exportar transações: {e}")
@@ -81,9 +84,9 @@ class DataExporter:
             filename = self.final_report_file
 
         try:
-            with pd.ExcelWriter(filename, engine='openpyxl') as writer:
+            with pd.ExcelWriter(filename, engine="openpyxl") as writer:
                 # Aba principal com dados
-                processed_df.to_excel(writer, sheet_name='Relatório_Principal', index=False)
+                processed_df.to_excel(writer, sheet_name="Relatório_Principal", index=False)
 
                 # Aba de resumo estatístico
                 if summary:
@@ -96,41 +99,42 @@ class DataExporter:
                         else:
                             summary_items.append([key, value])
 
-                    summary_df = pd.DataFrame(summary_items, columns=['Métrica', 'Valor'])
-                    summary_df.to_excel(writer, sheet_name='Resumo_Estatístico', index=False)
+                    summary_df = pd.DataFrame(summary_items, columns=["Métrica", "Valor"])
+                    summary_df.to_excel(writer, sheet_name="Resumo_Estatístico", index=False)
 
                 # Aba de categorias de despesa
-                if summary and 'expenses_by_category' in summary:
+                if summary and "expenses_by_category" in summary:
                     categories_data = []
                     for category in self.expense_categories:
-                        amount = summary['expenses_by_category'].get(category, 0)
+                        amount = summary["expenses_by_category"].get(category, 0)
                         categories_data.append([category, amount])
 
-                    categories_df = pd.DataFrame(categories_data, columns=['Categoria', 'Valor Total (BRL)'])
-                    categories_df.to_excel(writer, sheet_name='Despesas_por_Categoria', index=False)
+                    categories_df = pd.DataFrame(categories_data, columns=["Categoria", "Valor Total (BRL)"])
+                    categories_df.to_excel(writer, sheet_name="Despesas_por_Categoria", index=False)
 
                 # Aba de alertas
-                if summary and 'alert_transactions' in summary and summary['alert_transactions']:
-                    alerts_df = pd.DataFrame(summary['alert_transactions'])
-                    alerts_df.to_excel(writer, sheet_name='Alertas', index=False)
+                if summary and "alert_transactions" in summary and summary["alert_transactions"]:
+                    alerts_df = pd.DataFrame(summary["alert_transactions"])
+                    alerts_df.to_excel(writer, sheet_name="Alertas", index=False)
 
                 # Aba de metadados
                 metadata = {
-                    'Título': ['Relatório de Transações Bancárias'],
-                    'Data de Geração': [datetime.now().strftime('%d/%m/%Y %H:%M:%S')],
-                    'Total de Registros': [len(processed_df)],
-                    'Moeda Base': [summary.get('moeda_alvo', 'N/A') if summary else 'N/A'],
-                    'Valor Total': [summary.get('total_valor', 0) if summary else 0],
-                    'Threshold de Alerta': [f'R$ {self.alert_threshold}'],
-                    'Total de Alertas': [summary.get('alerts', 0) if summary else 0]
+                    "Título": ["Relatório de Transações Bancárias"],
+                    "Data de Geração": [datetime.now().strftime("%d/%m/%Y %H:%M:%S")],
+                    "Total de Registros": [len(processed_df)],
+                    "Moeda Base": [summary.get("moeda_alvo", "N/A") if summary else "N/A"],
+                    "Valor Total": [summary.get("total_valor", 0) if summary else 0],
+                    "Threshold de Alerta": [f"R$ {self.alert_threshold}"],
+                    "Total de Alertas": [summary.get("alerts", 0) if summary else 0],
                 }
                 metadata_df = pd.DataFrame(metadata)
-                metadata_df.to_excel(writer, sheet_name='Metadados', index=False)
+                metadata_df.to_excel(writer, sheet_name="Metadados", index=False)
 
             logger.info(f"Relatório formatado criado em {filename}")
 
         except Exception as e:
             logger.error(f"Erro ao criar relatório formatado: {e}")
+
 
 if __name__ == "__main__":
     # Exemplo de uso
@@ -138,23 +142,19 @@ if __name__ == "__main__":
 
     # Cria um DataFrame de exemplo
     sample_data = {
-        'Data': ['2023-01-01', '2023-01-02', '2023-01-03'],
-        'Descrição': ['Transação 1', 'Transação 2', 'Transação 3'],
-        'Valor': [100.0, 200.0, 150.0],
-        'Moeda': ['USD', 'EUR', 'USD'],
-        'Valor_Convertido': [500.0, 1100.0, 750.0],
-        'Moeda_Alvo': ['BRL', 'BRL', 'BRL']
+        "Data": ["2023-01-01", "2023-01-02", "2023-01-03"],
+        "Descrição": ["Transação 1", "Transação 2", "Transação 3"],
+        "Valor": [100.0, 200.0, 150.0],
+        "Moeda": ["USD", "EUR", "USD"],
+        "Valor_Convertido": [500.0, 1100.0, 750.0],
+        "Moeda_Alvo": ["BRL", "BRL", "BRL"],
     }
     sample_df = pd.DataFrame(sample_data)
 
-    sample_summary = {
-        'total_valor': 2350.0,
-        'media_valor': 783.33,
-        'num_transacoes': 3,
-        'moeda_alvo': 'BRL'
-    }
+    sample_summary = {"total_valor": 2350.0, "media_valor": 783.33, "num_transacoes": 3, "moeda_alvo": "BRL"}
 
     exporter.create_formatted_report(sample_df, sample_summary)
+
 
 # Função para uso direto (conforme esperado pelo main.py)
 def export_report(summary, rates):
@@ -174,22 +174,26 @@ def export_report(summary, rates):
 
     if processed_data.empty:
         # Cria dados de exemplo se não houver dados processados
-        processed_data = pd.DataFrame({
-            'Data': ['2024-01-01'],
-            'Descrição': ['Exemplo'],
-            'Valor': [100.0],
-            'Moeda': ['USD'],
-            'Valor_Convertido': [520.0],
-            'Moeda_Alvo': ['BRL'],
-            'Tipo': ['Exemplo']
-        })
+        processed_data = pd.DataFrame(
+            {
+                "Data": ["2024-01-01"],
+                "Descrição": ["Exemplo"],
+                "Valor": [100.0],
+                "Moeda": ["USD"],
+                "Valor_Convertido": [520.0],
+                "Moeda_Alvo": ["BRL"],
+                "Tipo": ["Exemplo"],
+            }
+        )
 
     # Adiciona informações de cotações ao resumo
     enhanced_summary = summary.copy()
-    enhanced_summary.update({
-        'cotacao_usd': rates.get('USD', 5.20),
-        'cotacao_eur': rates.get('EUR', 6.10),
-    })
+    enhanced_summary.update(
+        {
+            "cotacao_usd": rates.get("USD", 5.20),
+            "cotacao_eur": rates.get("EUR", 6.10),
+        }
+    )
 
     exporter = DataExporter()
     exporter.create_formatted_report(processed_data, enhanced_summary)

@@ -29,6 +29,25 @@ Thumbs.db
 *.swp
 *.swo
 
+# Testes e cobertura
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+htmlcov/
+.pytest_cache
+.mypy_cache
+
+# Pre-commit
+.pre-commit-config.yaml.backup
+
+# Build artifacts
+*.spec
+*.exe
+
 # Dados sensíveis (descomente se necessário)
 # data/cotacoes.xlsx
 # reports/relatorio_final.xlsx

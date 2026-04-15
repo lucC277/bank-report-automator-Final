@@ -17,7 +17,23 @@
 - **📋 Relatórios Excel**: Gera relatório com múltiplas abas (dados, resumo, categorias, alertas)
 - **📈 Análise por Categoria**: Classifica despesas em Alimentação, Transporte, Lazer, Saúde, Educação
 
-## 📁 Estrutura do Projeto
+## � Monitoramento e Qualidade
+
+### Status do CI/CD
+O projeto utiliza GitHub Actions para garantia de qualidade automática:
+
+- **✅ CI/CD Pipeline**: [Ver status](https://github.com/lucC277/bank-report-automator-Final/actions)
+- **📊 Cobertura de Código**: [Ver relatório](https://codecov.io/gh/lucC277/bank-report-automator-Final)
+- **🔒 Segurança**: Verificações automáticas com Bandit e Safety
+- **🎯 Qualidade**: Linting, formatação e testes em múltiplas versões Python
+
+### Métricas Atuais
+- **Testes**: 15/15 passando
+- **Cobertura**: >80% alvo mínimo
+- **Python**: 3.8, 3.9, 3.10, 3.11, 3.12
+- **Segurança**: Verificada automaticamente
+
+## �📁 Estrutura do Projeto
 
 ```
 bank-report-automator/

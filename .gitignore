@@ -1,5 +1,9 @@
 # .gitignore para Bank Report Automator
 
+# Dados e relatórios gerados (não commitar)
+data/
+reports/
+
 # Arquivos de log
 *.log
 bank_report.log

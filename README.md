@@ -305,7 +305,7 @@ Encontrou um bug? Por favor, reporte:
 
 <div align="center">
 
-**Feito com ❤️ por [Lucas Ricardo](https://github.com/lucC277)**
+**Feito por [Lucas Ricardo](https://github.com/lucC277)**
 
 ⭐ **Star este repositório se foi útil para você!**
 

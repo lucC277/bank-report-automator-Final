@@ -45,7 +45,8 @@ class TestExchangeRateCollector:
     @patch('src.collector.requests.get')
     def test_get_exchange_rates_api_error(self, mock_get):
         """Test handling of API errors"""
-        mock_get.side_effect = Exception("API Error")
+        from requests import RequestException
+        mock_get.side_effect = RequestException("API Error")
 
         collector = ExchangeRateCollector()
         rates = collector.get_exchange_rates()

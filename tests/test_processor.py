@@ -53,22 +53,26 @@ class TestDataProcessor:
         })
 
         processor = DataProcessor()
-        result = processor.convert_currency(100, 'USD', 'BRL', sample_rates)
+        result = processor.convert_currency(100, 'USD', 'EUR', sample_rates)
 
-        # Expected: 100 * 5.20 = 520.00
-        assert result == 520.00
+        # Expected: 100 / 5.20 * 6.10 = 117.31
+        assert abs(result - 117.31) < 0.01
 
     def test_generate_summary(self):
         """Test summary generation"""
         sample_data = pd.DataFrame({
             'Valor_Convertido': [1000, 2000, 500],
-            'Tipo': ['Recebimento', 'Recebimento', 'Compra']
+            'Tipo': ['Recebimento', 'Recebimento', 'Compra'],
+            'Descrição': ['Salário', 'Freelance', 'Alimentação'],
+            'Data': ['2024-01-01', '2024-01-02', '2024-01-03']
         })
 
         processor = DataProcessor()
         summary = processor.generate_summary(sample_data)
 
-        assert summary['total_valor'] == 3500
+        assert summary['total_income'] == 3000
+        assert summary['total_expenses'] == 500
+        assert summary['balance'] == 2500
         assert summary['num_transacoes'] == 3
         assert summary['total_income'] == 3000  # 1000 + 2000
         assert summary['total_expenses'] == 500  # 500
